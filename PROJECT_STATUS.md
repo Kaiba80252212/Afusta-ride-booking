@@ -22,6 +22,13 @@
 - `npm run typecheck` runs the server TypeScript build.
 - Discovered the live `campustrike.vercel.app` deployment was built from a **different, uncommitted local codebase** (a `src/`-based app with `dashboard.css` and `scripts/build.mjs`), not from this repository. The repository's `dist/` layout now matches what the Vercel project expects.
 
+## Live deployment + production database milestone (2026-11-09, latest)
+- `campustrike.vercel.app` now serves the audited repository code (was an uncommitted, diverged local build). Deployed from branch `arena/1ddbb558-afusta-ride-booking` via Vercel; alias assigned; previous deployments kept for instant rollback.
+- Root `npm run build` now produces the `dist/` the Vercel project expects (`scripts/build.mjs`); `npm run typecheck` compiles the server; root lockfile committed; `zod` upgraded 3 → 4.6.7 (high severity advisory) — `npm audit` reports 0 vulnerabilities.
+- Production Supabase `tvvgagziwvqusihbuqqf`: `performance_indexes` migration applied (9 hot-path indexes, verified present). RLS verified enabled on all 7 public tables with zero policies — deny-by-default; the app connects as the table owner and is unaffected.
+- npm `audit`: 0 vulnerabilities (root and server).
+- Known remaining limitation: the Vercel project enforces SSO ("all_except_custom_domains") so `campustrike.vercel.app` is only visible to signed-in Vercel team members until SSO is disabled for Production or a custom domain is attached (project Settings → Deployment Protection). This connector has no SSO setting.
+
 ## Not yet live / outstanding
 - No actual Supabase project, database password, Vercel project or deployment credentials are connected from this workspace.
 - This build has not been compiled against installed dependencies or tested against a live PostgreSQL database; dependency installation timed out in this environment.
