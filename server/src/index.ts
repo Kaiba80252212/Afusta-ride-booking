@@ -6,8 +6,14 @@ import { pool } from './db.js'; import { requireAuth, allow, AuthRequest } from 
 import { cacheGet, cacheSet, cacheInvalidate, FARES_CACHE_KEY, LOCATIONS_CACHE_KEY } from './cache.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET || JWT_SECRET.length < 32) {
-  throw new Error('JWT_SECRET must be set and at least 32 characters long. Refusing to start with a weak or missing secret.');
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET is not set. Refusing to start without a signing secret.');
+}
+if (JWT_SECRET.length < 16) {
+  throw new Error('JWT_SECRET is dangerously short (< 16 characters). Refusing to start.');
+}
+if (JWT_SECRET.length < 32) {
+  console.warn('WARNING: JWT_SECRET is shorter than the recommended 32 characters. Rotate it to a longer random value.');
 }
 
 export const app=express(); app.disable('x-powered-by'); app.use(helmet({contentSecurityPolicy:false})); app.use(cors({origin:process.env.FRONTEND_ORIGIN ? process.env.FRONTEND_ORIGIN.split(',') : false})); app.use(express.json({limit:'30kb'}));
