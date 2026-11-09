@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CampusTrike | AFUSTA Campus Tricycle Booking</title>
+  <meta name="description" content="CampusTrike helps AFUSTA students request campus tricycles: check an estimated cash fare, follow booking status updates and manage rides in one place.">
+  <meta name="theme-color" content="#0b1712">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CampusTrike">
+  <meta property="og:title" content="CampusTrike | AFUSTA Campus Mobility">
+  <meta property="og:description" content="Request a campus tricycle in a few steps, see the estimated cash fare and track every stage of your booking.">
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/afusta-ride-favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <script>try{if(localStorage.getItem('ct_dark')==='1'){document.documentElement.classList.add('dark')}}catch(e){}</script>
+</head>
+<body>
+<a class="skip-link" href="#book">Skip to booking form</a>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="CampusTrike home">
+    <img src="assets/campustrike-icon.svg" alt="" class="brand-icon" width="42" height="42">
+    <span><strong>CampusTrike</strong><small>AFUSTA Campus Mobility</small></span>
+  </a>
+  <nav aria-label="Primary"><a href="#book">Book a ride</a><a href="#trips">My trips</a></nav>
+  <div class="top-actions"><span id="accountLabel" class="account-label">Not signed in</span><button id="logoutBtn" class="secondary-btn" hidden>Sign out</button><button id="themeBtn" class="icon-btn" aria-label="Toggle theme" aria-pressed="false">☼</button></div>
+</header>
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="live-dot"></span> CAMPUS TRANSPORT, SIMPLIFIED</span>
+      <h1>Your campus.<br><em>Your ride.</em></h1>
+      <p>Request a campus tricycle in a few simple steps. Check your estimated fare, follow booking updates, and pay your driver in cash.</p>
+      <a class="primary-btn" href="#book">Book a tricycle <span aria-hidden="true">↗</span></a>
+      <div class="trust-row"><span>✓ Campus-focused</span><span>✓ Cash payment</span><span>✓ Simple booking</span></div>
+    </div>
+    <div class="hero-card">
+      <div class="card-top"><span class="eyebrow">QUICK BOOKING</span><span class="status-pill">LIVE SERVICE</span></div>
+      <div class="route-line"><div class="route-mark pickup" aria-hidden="true">●</div><div><small>PICKUP</small><strong id="summaryPickup">Main Gate</strong></div></div>
+      <div class="route-connector" aria-hidden="true"></div>
+      <div class="route-line"><div class="route-mark drop" aria-hidden="true">◆</div><div><small>DESTINATION</small><strong id="summaryDestination">University Library</strong></div></div>
+      <div class="fare-preview"><div><small>ESTIMATED FARE</small><strong id="summaryFare">₦300</strong></div><span>Cash to driver</span></div>
+      <p class="fine-print">Fare is a demonstration estimate and can be changed by the administrator.</p>
+    </div>
+  </section>
+
+  <section class="section" id="book">
+    <div class="section-heading"><div><span class="eyebrow">01 / RIDE REQUEST</span><h2>Where are you going?</h2></div><p>Choose a campus pickup point and destination.</p></div>
+    <div class="content-grid">
+      <form id="bookingForm" class="panel booking-form">
+        <label for="studentName">Your name</label><input id="studentName" name="studentName" placeholder="Sign in to book a ride" readonly required autocomplete="name">
+        <div class="form-row"><div><label for="pickup">Pickup location</label><select id="pickup" required></select></div><div><label for="destination">Destination</label><select id="destination" required></select></div></div>
+        <label for="note">Note for driver <span class="optional">(optional)</span></label><input id="note" placeholder="e.g. I am near the main entrance" maxlength="500">
+        <div class="fare-box"><div><small>ESTIMATED FARE</small><strong id="fareValue">₦300</strong></div><div class="cash-label">◉ Cash payment</div></div>
+        <button class="primary-btn full" type="submit">Request tricycle <span aria-hidden="true">→</span></button>
+        <p class="fine-print">Your request is saved to the CampusTrike service and shared with approved drivers.</p>
+      </form>
+      <aside class="panel info-panel"><div class="illustration" aria-hidden="true">🛺</div><h3>A smoother campus trip</h3><p>Send a request, receive a booking reference, and see each status update in one place.</p><div class="feature"><span>01</span><div><strong>Clear fare estimate</strong><small>Know the displayed estimate before confirming.</small></div></div><div class="feature"><span>02</span><div><strong>Booking status</strong><small>Follow the request through its trip stages.</small></div></div><div class="feature"><span>03</span><div><strong>Pay in cash</strong><small>Pay the driver directly after the ride.</small></div></div></aside>
+    </div>
+  </section>
+
+
+  <section class="section workspace-section" id="workspace">
+    <div class="section-heading"><div><span class="eyebrow">DASHBOARD / WORKSPACE</span><h2 id="workspaceTitle">Student workspace</h2></div><span class="status-pill" id="workspaceRole">STUDENT DEMO</span></div>
+    <div class="workspace-grid">
+      <div class="panel workspace-main">
+        <div class="workspace-toolbar"><div><h3 id="workspaceHeading">Welcome to CampusTrike</h3><p id="workspaceDescription">Manage your campus rides from one place.</p></div><span class="avatar" id="workspaceAvatar" aria-hidden="true">ST</span></div>
+        <div class="workspace-metrics" id="workspaceMetrics"></div>
+        <div class="workspace-content" id="workspaceContent"></div>
+      </div>
+      <aside class="panel workspace-side">
+        <h3>Quick actions</h3>
+        <button class="quick-action" data-action="book">＋ <span><strong>Book a ride</strong><small>Create a new tricycle request</small></span></button>
+        <button class="quick-action" data-action="trips">↗ <span><strong>View bookings</strong><small>Review trip activity</small></span></button>
+        <button class="quick-action" data-action="help">? <span><strong>Help &amp; support</strong><small>Contact the platform team</small></span></button>
+        <div class="notice-box"><strong>Account security</strong><p>Only approved driver accounts can accept campus ride requests. Administrator access is created privately.</p></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" id="trips">
+    <div class="section-heading"><div><span class="eyebrow">02 / ACTIVITY</span><h2 id="activityTitle">Your bookings</h2></div><button class="secondary-btn" id="refreshTrips">Refresh bookings</button></div>
+    <div id="tripsList" class="trips-list" aria-live="polite"><div class="empty-state">Your booking history will appear here after you request a ride.</div></div>
+  </section>
+  <section class="section admin-section" id="adminSection" hidden>
+    <div class="section-heading"><div><span class="eyebrow">03 / OPERATIONS</span><h2>Operations overview</h2></div><span class="status-pill">DATABASE CONNECTED</span></div>
+    <div class="stats-grid"><div class="stat panel"><small>Total bookings</small><strong id="statTotal">0</strong></div><div class="stat panel"><small>Active requests</small><strong id="statActive">0</strong></div><div class="stat panel"><small>Completed trips</small><strong id="statDone">0</strong></div><div class="stat panel"><small>Recorded fares</small><strong id="statFares">₦0</strong></div></div>
+    <div class="panel"><h3>Driver approvals</h3><div id="driverApprovals" class="driver-approvals"><p class="fine-print">Loading driver accounts…</p></div></div><div class="panel"><h3>Fare settings</h3><label for="baseFare">Base fare in naira</label><div class="inline-form"><input id="baseFare" type="number" min="0" step="1" inputmode="decimal" value="300"><button class="secondary-btn" id="saveFare">Save fare</button></div><p class="fine-print">Changes are saved centrally and apply to future bookings. Confirm approved campus pricing before launch.</p></div>
+  </section>
+</main>
+<footer><div class="brand footer-brand"><img src="assets/campustrike-icon.svg" alt="" class="brand-icon" width="34" height="34" loading="lazy"><span><strong>CampusTrike</strong><small>Campus mobility · AFUSTA</small></span></div><p>Service availability and operating rules are subject to AFUSTA approval.</p></footer>
+<section id="authGate" class="auth-gate" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="auth-card panel">
+    <div class="auth-brand"><img src="assets/campustrike-icon.svg" alt="" width="46" height="46"><div><strong>CampusTrike</strong><small>AFUSTA Campus Mobility</small></div></div>
+    <span class="eyebrow">SECURE ACCOUNT ACCESS</span><h2 id="authTitle">Welcome back</h2><p id="authDescription">Sign in to manage your campus rides.</p>
+    <form id="authForm">
+      <div id="nameField" hidden><label for="authName">Full name</label><input id="authName" autocomplete="name" minlength="2" maxlength="140"></div>
+      <label for="authEmail">Email address</label><input id="authEmail" type="email" autocomplete="email" required maxlength="255">
+      <label for="authPassword">Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="10" maxlength="128" required>
+      <div id="roleField" hidden><label for="authRole">Account type</label><select id="authRole"><option value="student">Student</option><option value="driver">Tricycle driver</option></select></div>
+      <button class="primary-btn full" id="authSubmit" type="submit">Sign in <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="auth-switch"><span id="authSwitchText">New to CampusTrike?</span> <button id="authSwitch" type="button">Create account</button></p>
+    <p class="fine-print">Administrator accounts are provisioned securely by the system owner. They cannot be created through public registration.</p>
+  </div>
+</section>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<noscript><p class="noscript-note">CampusTrike needs JavaScript enabled to sign you in and manage bookings.</p></noscript>
+<script src="app.js" defer></script>
+</body></html>
