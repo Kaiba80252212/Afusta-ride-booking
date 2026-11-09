@@ -8,6 +8,14 @@
 - Added Vercel deployment configuration, root dependency manifest and `DEPLOYMENT_VERCEL_SUPABASE.md`.
 - JWT is stored in sessionStorage (cleared when the browser session ends); no database credentials are embedded in frontend code.
 
+## Performance & hardening milestone (2026-11-09)
+- Frontend: Google Fonts moved from CSS `@import` to `<link>` + preconnect; ~1 MB favicon set optimised to ~77 KB PNG / 15 KB ICO (+ dedicated 180px apple-touch-icon); Open Graph/description meta; explicit width/height on icons; `:focus-visible`, skip link and `prefers-reduced-motion` support; dark mode applied before first paint; auth gate now uses `inert`/`aria-modal`; all API calls carry a 15s timeout; bootstrap data fetched in parallel; admin "recorded fares" stat now uses the server-computed `completed_fares` aggregate.
+- Backend: `JWT_SECRET` validated at startup (min 32 chars, HS256 pinned); timing-equalised login (dummy bcrypt hash); fare/location reads cached in-memory with short TTL; admin overview now runs as one parallel fan-out and returns `completed_fares`; fare update is transactional and invalidates the fare cache; suspension/rejection is enforced on booking status, payment and accept routes; booking creation rate-limited; `Cache-Control: no-store` on `/api/*`; serverless-tuned pg pool (`PGPOOL_MAX`, `PG_CONNECT_TIMEOUT_MS`).
+- Database: new `server/sql/002_performance_indexes.sql` (partial index for the open-pending board, status/student/created indexes, active-location and active-fare lookups, users role+status, payment status, audit entity). Migrations now apply every `server/sql/*.sql` file in order. `pgcrypto` no longer required (gen_random_uuid is core on PG 13+).
+- Hosting: `vercel.json` sets CSP (inline theme bootstrap allow-listed by hash), nosniff, frame-deny, referrer/permissions policy, cache headers for assets/HTML/CSS/JS.
+- Verified locally against a real PostgreSQL: full student → driver → admin lifecycle, driver approval flow, fare change propagation, rate limiting, suspended-driver enforcement, and transactional fare update.
+- Added `npm run preview` (zero-dependency static server + `/api` proxy) for local end-to-end testing.
+
 ## Not yet live / outstanding
 - No actual Supabase project, database password, Vercel project or deployment credentials are connected from this workspace.
 - This build has not been compiled against installed dependencies or tested against a live PostgreSQL database; dependency installation timed out in this environment.

@@ -3,7 +3,7 @@
 ## Current implementation state
 - The browser client now calls `/api` and uses server-issued JWT sessions held in `sessionStorage`.
 - Express routes are exposed through the Vercel Node.js function at `api/index.ts`.
-- PostgreSQL schema and seed data are in `server/sql/001_init.sql`.
+- PostgreSQL schema and seed data are in `server/sql/001_init.sql`; hot-path indexes are in `server/sql/002_performance_indexes.sql`. `npm run db:migrate` applies both in order.
 - Driver approval, student cancellation, booking acceptance, trip progression, cash-payment reporting, admin overview and fare update routes are included.
 - The UI no longer writes bookings or fares to browser `localStorage`.
 
@@ -11,7 +11,7 @@ This is an integration-ready source build, not a deployed service. It has not be
 
 ## 1. Create the Supabase database
 1. Create a Supabase project in your own account.
-2. Open **SQL Editor** and run `server/sql/001_init.sql` once.
+2. Open **SQL Editor** and run `server/sql/001_init.sql`, then `server/sql/002_performance_indexes.sql` once each (or run `npm run db:migrate` against the database).
 3. Confirm that `users`, `vehicles`, `locations`, `fare_settings`, `bookings`, `payment_records` and `audit_logs` exist.
 4. The initial locations and ₦300 base fare are illustrative placeholders. Replace them with values formally approved by AFUSTA before launch.
 5. Copy the PostgreSQL connection string from **Project Settings → Database → Connection string**. Use the Session Pooler if direct IPv6 connectivity is unavailable. Keep the password private.

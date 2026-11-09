@@ -6,7 +6,9 @@
   "scripts": {
     "dev:api": "npm --prefix server run dev",
     "build": "npm --prefix server run build",
-    "db:migrate": "npm --prefix server run db:migrate"
+    "db:migrate": "npm --prefix server run db:migrate",
+    "preview": "node scripts/preview.mjs",
+    "start": "npm --prefix server run start"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
