@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "dev:api": "npm --prefix server run dev",
-    "build": "npm --prefix server run build",
+    "build": "node scripts/build.mjs",
     "db:migrate": "npm --prefix server run db:migrate",
     "preview": "node scripts/preview.mjs",
-    "start": "npm --prefix server run start"
+    "start": "npm --prefix server run start",
+    "typecheck": "npm --prefix server run build",
+    "test": "node --test tests/smoke.test.mjs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -18,7 +18,9 @@ CampusTrike is a browser-based campus tricycle booking and operations platform f
 2. Copy `server/.env.example` to `server/.env` and set a PostgreSQL `DATABASE_URL` and strong `JWT_SECRET` (at least 32 characters — the API refuses to start otherwise).
 3. Run `npm run db:migrate` from the root. It applies every file in `server/sql/` in order (`001_init.sql`, then `002_performance_indexes.sql`).
 4. Run the API locally with `npm run dev:api`.
-5. Serve the repository root with `npm run preview` (serves the frontend on port 3000 and proxies `/api/*` to the local API on port 4000) and open `http://localhost:3000`. The browser uses `/api` by default; for a separate local frontend origin set `window.CAMPUS_TRIKE_API` before `app.js` or configure the API CORS origin.
+5. Run the automated API acceptance tests with `BASE_URL=http://127.0.0.1:4000 ADMIN_EMAIL=... ADMIN_PASSWORD=... npm test`.
+`npm run build` copies the static frontend into `dist/` (the Vercel project expects `outputDirectory: dist`); `npm run typecheck` compiles the server TypeScript.
+6. Serve the repository root with `npm run preview` (serves the frontend on port 3000 and proxies `/api/*` to the local API on port 4000) and open `http://localhost:3000`. The browser uses `/api` by default; for a separate local frontend origin set `window.CAMPUS_TRIKE_API` before `app.js` or configure the API CORS origin.
 
 ## Performance and hardening notes
 - Static assets (`/assets/*`, `/styles.css`, `/app.js`) are served with explicit cache headers; HTML revalidates every load. Security headers (CSP, nosniff, frame-deny, referrer and permissions policy) are set in `vercel.json`.

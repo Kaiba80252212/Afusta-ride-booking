@@ -16,6 +16,12 @@
 - Verified locally against a real PostgreSQL: full student → driver → admin lifecycle, driver approval flow, fare change propagation, rate limiting, suspended-driver enforcement, and transactional fare update.
 - Added `npm run preview` (zero-dependency static server + `/api` proxy) for local end-to-end testing.
 
+## Deployment build fix + test milestone (2026-11-09, later)
+- Added `scripts/build.mjs` and pointed root `npm run build` at it: produces `dist/` (the Vercel project is configured with framework "vite" and `outputDirectory: dist`). Previously `npm run build` only built `server/dist`, so a from-this-repo deployment would have failed or served nothing.
+- Added `tests/smoke.test.mjs` — 7 automated end-to-end API tests (health, auth, wrong-password rejection, booking validation, full student→driver→admin ride lifecycle with payment confirmation, fare read, unauthenticated rejection). Run with `npm test` against a running API; admin-dependent test skips when `ADMIN_EMAIL`/`ADMIN_PASSWORD` are not set.
+- `npm run typecheck` runs the server TypeScript build.
+- Discovered the live `campustrike.vercel.app` deployment was built from a **different, uncommitted local codebase** (a `src/`-based app with `dashboard.css` and `scripts/build.mjs`), not from this repository. The repository's `dist/` layout now matches what the Vercel project expects.
+
 ## Not yet live / outstanding
 - No actual Supabase project, database password, Vercel project or deployment credentials are connected from this workspace.
 - This build has not been compiled against installed dependencies or tested against a live PostgreSQL database; dependency installation timed out in this environment.
