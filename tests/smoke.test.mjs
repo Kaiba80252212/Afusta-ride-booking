@@ -118,3 +118,11 @@ test('unauthenticated requests are rejected', async () => {
   assert.equal((await api('/api/bookings')).status, 401);
   assert.equal((await api('/api/locations')).status, 401);
 });
+
+test('rate limit buckets are per client IP behind a proxy (X-Forwarded-For)', async () => {
+  const student = await register('student');
+  const res = await fetch(BASE + '/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Forwarded-For': `198.51.100.${Math.floor(Math.random() * 200) + 1}` }, body: JSON.stringify({ email: student.email, password: student.password }) });
+  assert.equal(res.status, 200);
+  // A brand-new client IP must get a fresh bucket, not the bucket shared by the proxy.
+  assert.equal(Number(res.headers.get('ratelimit-remaining')), 29);
+});
