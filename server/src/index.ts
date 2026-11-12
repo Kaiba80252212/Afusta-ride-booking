@@ -16,7 +16,8 @@ if (JWT_SECRET.length < 32) {
   console.warn('WARNING: JWT_SECRET is shorter than the recommended 32 characters. Rotate it to a longer random value.');
 }
 
-export const app=express(); app.disable('x-powered-by'); app.use(helmet({contentSecurityPolicy:false})); app.use(cors({origin:process.env.FRONTEND_ORIGIN ? process.env.FRONTEND_ORIGIN.split(',') : false})); app.use(express.json({limit:'30kb'}));
+export const app=express(); app.disable('x-powered-by'); // Trust the first proxy hop (Vercel) so req.ip is the real client, not the shared edge IP — otherwise express-rate-limit buckets every visitor together.
+app.set('trust proxy', 1); app.use(helmet({contentSecurityPolicy:false})); app.use(cors({origin:process.env.FRONTEND_ORIGIN ? process.env.FRONTEND_ORIGIN.split(',') : false})); app.use(express.json({limit:'30kb'}));
 // Authenticated API responses must never be stored by browsers or shared proxies.
 app.use('/api',(_req,res,next)=>{res.set('Cache-Control','no-store');next();});
 const authLimiter=rateLimit({windowMs:15*60*1000,limit:30,standardHeaders:true,legacyHeaders:false,message:{error:'Too many attempts, please try again later'}});
